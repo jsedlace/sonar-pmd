@@ -19,11 +19,16 @@
  */
 package org.sonar.plugins.pmd;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
 import net.sourceforge.pmd.PMDConfiguration;
 import net.sourceforge.pmd.PMDException;
@@ -32,9 +37,6 @@ import net.sourceforge.pmd.RuleSets;
 import net.sourceforge.pmd.SourceCodeProcessor;
 import net.sourceforge.pmd.lang.LanguageVersion;
 import net.sourceforge.pmd.lang.java.JavaLanguageModule;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 
 public class PmdTemplate {
 
@@ -95,7 +97,7 @@ public class PmdTemplate {
     }
 
     public void process(InputFile file, RuleSets rulesets, RuleContext ruleContext) {
-        ruleContext.setSourceCodeFilename(file.uri().toString());
+		ruleContext.setSourceCodeFile(new File(file.uri()));
 
         try (InputStream inputStream = file.inputStream()) {
             processor.processSourceCode(inputStream, rulesets, ruleContext);

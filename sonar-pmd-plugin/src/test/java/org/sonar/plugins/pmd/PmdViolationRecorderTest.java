@@ -19,10 +19,15 @@
  */
 package org.sonar.plugins.pmd;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import java.io.File;
 
-import net.sourceforge.pmd.Rule;
-import net.sourceforge.pmd.RuleViolation;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.TextRange;
@@ -36,12 +41,8 @@ import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import net.sourceforge.pmd.Rule;
+import net.sourceforge.pmd.RuleViolation;
 
 class PmdViolationRecorderTest {
 
@@ -137,7 +138,7 @@ class PmdViolationRecorderTest {
         final RuleViolation pmdViolation = mock(RuleViolation.class);
 
         when(rule.getName()).thenReturn(ruleName);
-        when(pmdViolation.getFilename()).thenReturn(file.toURI().toString());
+        when(pmdViolation.getFilename()).thenReturn(file.getPath());
         when(pmdViolation.getBeginLine()).thenReturn(2);
         when(pmdViolation.getDescription()).thenReturn("Description");
         when(pmdViolation.getRule()).thenReturn(rule);

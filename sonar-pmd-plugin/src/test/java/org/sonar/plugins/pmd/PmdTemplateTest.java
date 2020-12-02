@@ -19,24 +19,6 @@
  */
 package org.sonar.plugins.pmd;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import net.sourceforge.pmd.PMDConfiguration;
-import net.sourceforge.pmd.PMDException;
-import net.sourceforge.pmd.RuleContext;
-import net.sourceforge.pmd.RuleSets;
-import net.sourceforge.pmd.SourceCodeProcessor;
-import net.sourceforge.pmd.lang.java.JavaLanguageHandler;
-import org.junit.jupiter.api.Test;
-import org.mockito.stubbing.Answer;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,6 +27,26 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.stubbing.Answer;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
+
+import net.sourceforge.pmd.PMDConfiguration;
+import net.sourceforge.pmd.PMDException;
+import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.RuleSets;
+import net.sourceforge.pmd.SourceCodeProcessor;
+import net.sourceforge.pmd.lang.java.JavaLanguageHandler;
 
 class PmdTemplateTest {
 
@@ -71,7 +73,7 @@ class PmdTemplateTest {
 
         new PmdTemplate(configuration, processor).process(inputFile, rulesets, ruleContext);
 
-        verify(ruleContext).setSourceCodeFilename(inputFile.uri().toString());
+        verify(ruleContext).setSourceCodeFile(new File(inputFile.uri()));
         verify(processor).processSourceCode(any(InputStream.class), eq(rulesets), eq(ruleContext));
     }
 

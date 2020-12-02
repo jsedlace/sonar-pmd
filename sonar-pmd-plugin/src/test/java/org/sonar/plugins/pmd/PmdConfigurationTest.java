@@ -19,6 +19,12 @@
  */
 package org.sonar.plugins.pmd;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -26,7 +32,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import net.sourceforge.pmd.Report;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,11 +39,7 @@ import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.internal.MapSettings;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import net.sourceforge.pmd.Report;
 
 class PmdConfigurationTest {
 
@@ -102,7 +103,7 @@ class PmdConfigurationTest {
 
         assertThat(reportFile.toFile()).isEqualTo(new File(WORK_DIR, "pmd-result.xml"));
         List<String> writtenLines = Files.readAllLines(reportFile, StandardCharsets.UTF_8);
-        assertThat(writtenLines).hasSize(6);
+        assertThat(writtenLines).hasSize(3);
         assertThat(writtenLines.get(1)).contains("<pmd");
     }
 
